@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Control Milight lights through a Milight box (e.g. ibox2).",
+    "description": "RESTful API for Milight lights. They must be paired with a compatible WiFi box (e.g. ibox2) and configured in config.js",
     "version": "0.2.0",
     "title": "milights-rest",
     "contact": {
@@ -207,6 +207,11 @@
           "type": "integer",
           "maximum": 100,
           "minimum": 0
+        },
+        "temperature": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": 1000
         },
         "saturation": {
           "type": "integer",
