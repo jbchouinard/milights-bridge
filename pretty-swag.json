@@ -11,5 +11,10 @@
     "URL": "https://github.com/jbchouinard/milights-rest",
     "text": "GitHub Project",
     "location": "RR"
+  },
+  "collapse": {
+    "path": false,
+    "method": true,
+    "tool": true
   }
 }
