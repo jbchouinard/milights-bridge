@@ -11,29 +11,35 @@ NodeJS and NPM.
 
 ## Installation
 
+### Install App
 ```bash
 git clone https://github.com/jbchouinard/milights-rest.git
 cd milights-rest
 npm install
 cp config.example.js config.js
 # Edit config.js
+```
+
+### Generate API docs
+```bash
+# Edit "host" in swagger.json
+npm install -g pretty-swag
+pretty-swag -c pretty-swag.json
+```
+
+## Running
+
+### As normal process
+
+```bash
 node server.js
 ```
 
-## Run as a service
+###  As a service
 ```bash
 npm install -g forever
 forever start server.js
 forever stop server.js
-```
-
-## Re-generate API docs
-If you want Try This Operation to work properly on the API docs, edit "host"
-in swagger.json and re-generate the docs:
-
-```bash
-npm install -g pretty-swag
-pretty-swag -c pretty-swag.json
 ```
 
 ## License
