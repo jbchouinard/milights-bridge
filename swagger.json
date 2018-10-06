@@ -43,7 +43,7 @@
           "500": {
             "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/ServerErrorResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -80,13 +80,13 @@
           "400": {
             "description": "Invalid parameters supplied",
             "schema": {
-              "$ref": "#/definitions/InvalidRequestResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/ServerErrorResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -123,7 +123,7 @@
           "500": {
             "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/ServerErrorResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -167,19 +167,19 @@
           "400": {
             "description": "Invalid parameters supplied",
             "schema": {
-              "$ref": "#/definitions/InvalidRequestResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "404": {
             "description": "Invalid zoneName supplied",
             "schema": {
-              "$ref": "#/definitions/InvalidNameResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/ServerErrorResponse"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -301,41 +301,15 @@
         }
       }
     },
-    "ServerErrorResponse": {
+    "ErrorResponse": {
       "type": "object",
       "properties": {
         "status": {
           "type": "integer",
           "enum": [
+            400,
+            404,
             500
-          ]
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "InvalidNameResponse": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "integer",
-          "enum": [
-            404
-          ]
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "InvalidRequestResponse": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "integer",
-          "enum": [
-            400
           ]
         },
         "message": {
