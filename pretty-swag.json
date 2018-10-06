@@ -1,7 +1,6 @@
 {
   "input": "swagger.json",
   "output": "public/index.html",
-  "format": "lite",
   "format": "singleFile",
   "theme": {
     "default": "black",
