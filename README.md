@@ -28,6 +28,9 @@ forever stop server.js
 ```
 
 ## Re-generate API docs
+If you want Try This Operation to work properly on the API docs, edit "host"
+in swagger.json and re-generate the docs:
+
 ```bash
 npm install -g pretty-swag
 pretty-swag -i swagger.json -o public/index.html -th deep-orange
