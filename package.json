@@ -1,22 +1,30 @@
 {
   "name": "milights-rest",
-  "version": "0.1.0",
-  "description": "RESTful server to control Milight lights.",
-  "main": "server.js",
+  "version": "0.2.0",
+  "description": "RESTful API for Milight lights.",
   "scripts": {
     "start": "node server.js"
   },
   "repository": "github:jbchouinard/milights-rest",
+  "homepage": "https://github.com/jbchouinard/milights-rest",
+  "url": "https://github.com/jbchouinard/milights-rest/issues",
   "contributors": [
     { "name": "Jerome Boisvert-Chouinard" },
     { "name": "Kevin Van Ryckegem (author of milights-bridge)" }
   ],
-  "license": "CC BY-NC-SA 3.0",
+  "license": "CC-BY-NC-SA-3.0",
   "dependencies": {
-    "ejs": "^2.6.1",
+    "api-error-handler": "^1.0.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "http-errors": "^1.7.1",
     "ip": "^1.1.5",
-    "node-milight-promise": "^0.3.1",
-    "body-parser": "^1.18.3"
+    "node-milight-promise": "^0.3.1"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 5,
+      "sourceType": "module"
+    }
   }
 }
