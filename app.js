@@ -1,12 +1,11 @@
-const bodyParser = require("body-parser");
 const express = require("express");
+const bodyParser = require("body-parser");
 
-const lightsApi = require("./controllers/lights");
+const zones = require("./controllers/zones");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use("/api", lightsApi);
+app.use("/api/zones", zones);
 
 module.exports = app;

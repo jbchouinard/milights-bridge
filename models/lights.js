@@ -123,7 +123,7 @@ RGBCCTBase.prototype.update = function(mode, state) {
         commands.push(this.commands.whiteMode(this.zone));
     } else if (mode === "effect" && (this.mode !== "effect" || this.state.effectMode !== state.effectMode)) {
         commands.push(this.commands.effectMode(this.zone, state.effectMode));
-    } else {  // Mode is off
+    } else if (mode === "off" && this.mode !== "off") {
         commands.push(this.commands.off(this.zone));
     }
 
