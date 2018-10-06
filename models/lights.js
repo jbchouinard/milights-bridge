@@ -1,20 +1,21 @@
+"use strict";
 const milight = require("node-milight-promise");
 
-const lightTypes = {};
-const zones = {};
-const zoneNames = [];
+const types = {};
+const zones = new Map();
 
 function initialize(bridge_ip, bridge_version, zone_config) {
     const bridge = new milight.MilightController({ ip: bridge_ip, type: bridge_version });
     const commands = [];
     zone_config.forEach(function(zn) {
-        const light = lightTypes[zn.type](bridge, zn.zone, zn.name, zn.hueOffset);
-        zones[zn.name] = light;
-        zoneNames.push(zn.name);
+        const light = types[zn.type](bridge, zn.zone, zn.name, zn.hueOffset);
+        zones.set(zn.name, light);
         commands.push(light.commands.off(light.zone));
     });
     bridge.ready().then(function() {
         bridge.sendCommands(commands);
+    }).catch(function(err) {
+        console.log(err);
     });
 }
 
@@ -140,7 +141,7 @@ RGBCCTBase.prototype.update = function(mode, state) {
 
     // Send commands
     if (commands.length > 0) {
-        this.bridge.sendCommands(commands);
+        this.bridge.sendCommands(...commands);
     }
 
     // Update object state
@@ -148,14 +149,14 @@ RGBCCTBase.prototype.update = function(mode, state) {
     this.state = state;
 };
 
-lightTypes.RGBCCT8 = function(bridge, zone, name, hueOffset) {
+types.RGBCCT8 = function(bridge, zone, name, hueOffset) {
     const light = new RGBCCTBase(bridge, zone, name, hueOffset);
     light.commands = milight.commandsV6.fullColor8Zone;
     light.protocol = "commandsV6.fullColor8Zone";
     return light;
 };
 
-lightTypes.RGBCCT4 = function(bridge, zone, name, hueOffset) {
+types.RGBCCT4 = function(bridge, zone, name, hueOffset) {
     const light = new RGBCCTBase(bridge, zone, name, hueOffset);
     light.commands = milight.commandsV6.fullColor;
     light.protocol = "commandsV6.fullColor";
@@ -164,7 +165,6 @@ lightTypes.RGBCCT4 = function(bridge, zone, name, hueOffset) {
 
 module.exports = {
     "initialize": initialize,
-    "lightTypes": lightTypes,
+    "types": types,
     "zones": zones,
-    "zoneNames": zoneNames
 };
