@@ -1,0 +1,351 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Control Milight lights through a Milight box (e.g. ibox2).",
+    "version": "0.2.0",
+    "title": "milights-rest",
+    "contact": {
+      "email": "github@jbchouinard.net"
+    },
+    "license": {
+      "name": "CC-BY-NC-SA-3.0",
+      "url": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    }
+  },
+  "host": "127.0.0.1:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "zones",
+      "description": "Control Milight lighting zones"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/zones": {
+      "get": {
+        "tags": [
+          "zones"
+        ],
+        "summary": "Get lighting status for all zones",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "schema": {
+              "$ref": "#/definitions/ZoneListResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "zones"
+        ],
+        "summary": "Set the lighting for all zones",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Settings for the zone",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ZoneUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lighting updated",
+            "schema": {
+              "$ref": "#/definitions/ZoneListResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters supplied",
+            "schema": {
+              "$ref": "#/definitions/InvalidRequestResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/zones/{zoneName}": {
+      "get": {
+        "tags": [
+          "zones"
+        ],
+        "summary": "Get the lighting status for a single zone",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "zoneName",
+            "in": "path",
+            "description": "Name of zone to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "schema": {
+              "$ref": "#/definitions/ZoneResponse"
+            }
+          },
+          "404": {
+            "description": "Invalid zoneName supplied schema: $ref: "
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "zones"
+        ],
+        "summary": "Set the lighting for a single zone",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "zoneName",
+            "in": "path",
+            "description": "Name of zone to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Settings for the zone",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ZoneUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lighting updated",
+            "schema": {
+              "$ref": "#/definitions/ZoneResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters supplied",
+            "schema": {
+              "$ref": "#/definitions/InvalidRequestResponse"
+            }
+          },
+          "404": {
+            "description": "Invalid zoneName supplied",
+            "schema": {
+              "$ref": "#/definitions/InvalidNameResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "color",
+        "white",
+        "effect",
+        "night",
+        "off"
+      ]
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "brightness": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "saturation": {
+          "type": "integer",
+          "maximum": 100,
+          "minimum": 0
+        },
+        "hue": {
+          "type": "integer",
+          "maximum": 255,
+          "minimum": 0
+        },
+        "effectMode": {
+          "type": "integer",
+          "maximum": 9,
+          "minimum": 1
+        }
+      }
+    },
+    "Zone": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "bridge": {
+          "type": "string",
+          "readOnly": true
+        },
+        "protocol": {
+          "type": "string",
+          "readOnly": true
+        },
+        "zone": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "hueOffset": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "mode": {
+          "$ref": "#/definitions/Mode"
+        },
+        "state": {
+          "$ref": "#/definitions/State"
+        }
+      }
+    },
+    "ZoneUpdate": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/Mode"
+        },
+        "state": {
+          "$ref": "#/definitions/State"
+        }
+      }
+    },
+    "ZoneResponse": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            200
+          ]
+        },
+        "data": {
+          "$ref": "#/definitions/Zone"
+        }
+      }
+    },
+    "ZoneListResponse": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            200
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Zone"
+          }
+        }
+      }
+    },
+    "ServerErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            500
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "InvalidNameResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            404
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "InvalidRequestResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "enum": [
+            400
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

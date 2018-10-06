@@ -7,10 +7,7 @@ milights-rest provides a RESTful API to control milight bulbs.
 Only v6 protocol full color bulbs (4 zones and 8 zones) are implemented for now.
 
 ## Requirements
-```bash
-sudo apt-get update
-sudo apt-get install nodejs npm
-```
+NodeJS and NPM. 
 
 ## Installation
 
@@ -23,11 +20,17 @@ cp config.example.js config.js
 node server.js
 ```
 
-## Running as a service
+## Run as a service
 ```bash
-sudo npm install -g forever
+npm install -g forever
 forever start server.js
 forever stop server.js
+```
+
+## Re-generate API docs
+```bash
+npm install -g pretty-swag
+pretty-swag -i swagger.json -o public/index.html -th deep-orange
 ```
 
 ## License
