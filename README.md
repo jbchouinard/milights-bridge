@@ -2,6 +2,8 @@
 
 milights-rest provides a RESTful API to control milight bulbs.
 
+![Screenshot](screenshot.png)
+
 ## Features
 
 Only v6 protocol full color bulbs (4 zones and 8 zones) are implemented for now.
