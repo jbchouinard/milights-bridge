@@ -1,0 +1,16 @@
+{
+  "input": "swagger.json",
+  "output": "public/index.html",
+  "format": "lite",
+  "format": "singleFile",
+  "theme": {
+    "default": "black",
+    "GET": "indigo",
+    "PUT": "deep-orange"
+  },
+  "home": {
+    "URL": "https://github.com/jbchouinard/milights-rest",
+    "text": "GitHub Project",
+    "location": "RR"
+  }
+}

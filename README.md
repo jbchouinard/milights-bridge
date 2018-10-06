@@ -33,7 +33,7 @@ in swagger.json and re-generate the docs:
 
 ```bash
 npm install -g pretty-swag
-pretty-swag -i swagger.json -o public/index.html -th deep-orange
+pretty-swag -c pretty-swag.json
 ```
 
 ## License

@@ -118,7 +118,10 @@
             }
           },
           "404": {
-            "description": "Invalid zoneName supplied schema: $ref: "
+            "description": "Invalid zoneName supplied",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
           },
           "500": {
             "description": "Server error",
