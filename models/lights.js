@@ -97,7 +97,11 @@ class RGBCCTBase {
 
         // Send commands
         if (commands.length > 0) {
-            this.bridge.sendCommands(...commands);
+            this.bridge.ready().then(
+                () => this.bridge.sendCommands(...commands)
+            ).catch(function(err) {
+                console.log(err);
+            });
         }
 
         // Update object state
