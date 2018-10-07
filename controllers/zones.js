@@ -29,7 +29,11 @@ router.route("")
                 zone.update(req.body.mode, req.body.state);
             }
         } catch(err) {
-            return next(createError(400, err.message));
+            if (err instanceof lights.StateError) {
+                return next(createError(400, err.message));
+            } else {
+                throw e;
+            }
         }
         res.json({
             status: 200,
@@ -54,7 +58,11 @@ router.route("/:zone")
             try {
                 zone.update(req.body.mode, req.body.state);
             } catch (err) {
-                return next(createError(400, err.message));
+                if (err instanceof lights.StateError) {
+                    return next(createError(400, err.message));
+                } else {
+                    throw err;
+                }
             }
             res.json({
                 status: 200,

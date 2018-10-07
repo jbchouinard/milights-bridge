@@ -4,6 +4,9 @@ const milight = require("node-milight-promise");
 const types = {};
 const zones = new Map();
 
+class StateError extends Error {}
+
+
 function initialize(bridge_ip, bridge_version, zone_config) {
     const bridge = new milight.MilightController({ ip: bridge_ip, type: bridge_version });
     const commands = [];
@@ -28,7 +31,7 @@ function checkBounds(min, max, name) {
         if (typeof x === "number" && x >= min && x <= max) {
             return x;
         }
-        throw Error(`expected a number between ${min} and ${max} in field ${name}`)
+        throw new StateError(`expected a number between ${min} and ${max} in field ${name}`)
     };
 }
 
@@ -141,7 +144,7 @@ class RGBCCTBase {
             }
         }
         else {
-            throw new Error(`expected mode to be one of off, night, color, white or effect`);
+            throw new StateError(`expected mode to be one of off, night, color, white or effect`);
         }
     }
 }
@@ -173,4 +176,5 @@ module.exports = {
     "initialize": initialize,
     "types": types,
     "zones": zones,
+    "StateError": StateError
 };
