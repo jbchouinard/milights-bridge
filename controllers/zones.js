@@ -6,71 +6,66 @@ const errorHandler = require("api-error-handler");
 const config = require("../config");
 const lights = require("../models/lights");
 
-lights.initialize(config.bridge_ip, config.bridge_version, config.zones);
-
-const router = express.Router({});
+let zoneMap = new Map();
+lights.initialize(config.bridge_ip, config.bridge_version, config.zones)
+    .then(function(initializedZones) {
+        for (let zone of initializedZones) {
+            zoneMap.set(zone.name, zone);
+        }
+    });
 
 function serialize(zone) {
     const serialized = zone.flatten();
-    serialized.link = config.server_url + "/zones/" + zone.name;
+    serialized.link = config.server_url + "/api/zones/" + zone.name;
     return serialized;
 }
+
+const router = express.Router({});
 
 router.route("")
     .get(function(req, res) {
         res.json({
             status: 200,
-            data: Array.from(lights.zones.values()).map(serialize)
+            data: Array.from(zoneMap.values()).map(serialize)
         });
     })
     .put(function(req, res, next) {
-        try {
-            for (let zone of lights.zones.values()) {
-                zone.update(req.body.mode, req.body.state);
-            }
-        } catch(err) {
-            if (err instanceof lights.StateError) {
-                return next(createError(400, err.message));
-            } else {
-                throw e;
-            }
-        }
-        res.json({
-            status: 200,
-            data: Array.from(lights.zones.values()).map(serialize)
-        });
-    });
-
-router.route("/:zone")
-    .get(function(req, res, next) {
-        if (lights.zones.has(req.params.zone)) {
-            res.json({
-                status: 200,
-                data: serialize(lights.zones.get(req.params.zone))
-            });
-        } else {
-            return next(createError(404, `zone ${req.params.zone} does not exist`));
-        }
-    })
-    .put(function(req, res, next) {
-        if (lights.zones.has(req.params.zone)) {
-            let zone = lights.zones.get(req.params.zone);
-            try {
-                zone.update(req.body.mode, req.body.state);
-            } catch (err) {
+        const zones = Array.from(zoneMap.values());
+        Promise.all(zones.map(zone => zone.update(req.body.mode, req.body.state)))
+            .then(() => res.json({status: 200, data: zones.map(serialize)}))
+            .catch(function(err) {
                 if (err instanceof lights.StateError) {
                     return next(createError(400, err.message));
                 } else {
                     throw err;
                 }
-            }
-            res.json({
-                status: 200,
-                data: serialize(zone)
             });
-        } else {
+    });
+
+router.route("/:zone")
+    .get(function(req, res, next) {
+        if (!zoneMap.has(req.params.zone)) {
             return next(createError(404, `zone ${req.params.zone} does not exist`));
         }
+        res.json({
+            status: 200,
+            data: serialize(zoneMap.get(req.params.zone))
+        })
+    })
+    .put(function(req, res, next) {
+        if (!zoneMap.has(req.params.zone)) {
+            return next(createError(404, `zone ${req.params.zone} does not exist`));
+        }
+        let zone = zoneMap.get(req.params.zone);
+        zone.update(req.body.mode, req.body.state)
+            .then(() => res.json({status: 200, data: serialize(zone)}))
+            .catch(function(err) {
+                if (err instanceof lights.StateError) {
+                    return next(createError(400, err.message));
+                } else {
+                    throw err;
+                }
+            });
     });
 
 router.use(errorHandler());
