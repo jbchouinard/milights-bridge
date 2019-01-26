@@ -4,10 +4,11 @@ const milight = require("node-milight-promise");
 const types = {};
 class StateError extends Error {}
 
-function initialize(bridge_ip, bridge_version, zone_config) {
+async function initialize(bridge_ip, bridge_version, zone_config) {
     const bridge = new milight.MilightController({ ip: bridge_ip, type: bridge_version });
     const zones = zone_config.map(conf => new types[conf.type](bridge, conf.zone, conf.name, conf.hueOffset));
-    return Promise.all(zones.map(zone => zone.initialize()));
+    await Promise.all(zones.map(zone => zone.initialize()));
+    return zones;
 }
 
 function bridgeName(bridge) {
@@ -43,8 +44,8 @@ class RGBCCTBase {
         this.state = {};
     }
     // () => Promise<RGBCCTBase>
-    initialize() {
-        return this.update('off', {}).then(()=>this);
+    async initialize() {
+        await this.update('off', {});
     }
     // () => Object
     flatten() {
@@ -59,51 +60,53 @@ class RGBCCTBase {
         }
     }
     // (string, Object) => Promise<undefined>
-    update(mode, state) {
+    async update(mode, state) {
         mode = mode || this.mode;
         state = state || {};
-        try {
-            state = this._mergeState(mode, state);
-        } catch(err) {
-            return Promise.reject(err);
-        }
+        state = this._mergeState(mode, state);
 
         const commands = [];
         // Mode commands
         if (mode !=="off" && this.mode === "off") {
             commands.push(this.commands.on(this.zone));
+            console.log(this.name, "on");
         }
         if (mode === "night" && this.mode !== "night") {
             commands.push(this.commands.nightMode(this.zone));
+            console.log(this.name, "night");
         } else if (mode === "color" && (this.mode !== "color" || state.hue !== this.state.hue)) {
             commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
+            console.log(this.name, "hue", state.hue);
         } else if (mode === "white" && this.mode !== "white") {
             commands.push(this.commands.whiteMode(this.zone));
+            console.log(this.name, "white");
         } else if (mode === "effect" && (this.mode !== "effect" || this.state.effectMode !== state.effectMode)) {
             commands.push(this.commands.effectMode(this.zone, state.effectMode));
+            console.log(this.name, "effectMode", state.effectMode);
         } else if (mode === "off" && this.mode !== "off") {
             commands.push(this.commands.off(this.zone));
+            console.log(this.name, "off");
         }
         // Other commands
         if (this.state.brightness !== state.brightness) {
-            commands.push(this.commands.brightness(this.zone, state.brightness))
+            commands.push(this.commands.brightness(this.zone, state.brightness));
+            console.log(this.name, "brightness", state.brightness);
         }
         if (this.state.saturation !== state.saturation) {
-            commands.push(this.commands.saturation(this.zone, state.saturation))
+            commands.push(this.commands.saturation(this.zone, state.saturation));
+            console.log(this.name, "saturation", state.saturation);
         }
-        if (this.state.temperature !== state.temperature) {
-            commands.push(this.commands.whiteTemperature(this.zone, state.temperature))
+        if (mode === "white" && this.state.temperature !== state.temperature) {
+            commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
+            console.log(this.name, "temperature", state.temperature);
         }
 
-        // Send commands to bridge if any
         if (commands.length > 0) {
-            return this.bridge.ready()
-                .then(() => this.bridge.sendCommands(...commands))
-                .then(() => { this.mode = mode; this.state = state; })
+            await this.bridge.ready();
+            await this.bridge.sendCommands(...commands);
+            this.mode = mode;
+            this.state = state;
         }
-        // Otherwise nothing to do, just resolve
-        return Promise.resolve();
-
     }
     _adjustHue(hue) {
         return (hue + this.hueOffset) % 256;
