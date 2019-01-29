@@ -1,12 +1,16 @@
 # milights-rest
 
-milights-rest provides a RESTful API to control milight bulbs.
+milights-rest provides a RESTful API to control milight LED bulbs and strips.
 
 ![Screenshot](screenshot.png)
 
 ## Features
 
-Only v6 protocol full color bulbs (4 zones and 8 zones) are implemented for now.
+Only v6 protocol full color bulbs (RGB CCT) - 4 zones and 8 zones - are implemented for now.
+
+If you have other hardware and you are willing to help test it feel free to open an issue:
+
+https://github.com/jbchouinard/milights-rest/issues
 
 ## Requirements
 NodeJS and NPM. 
@@ -43,6 +47,13 @@ npm install -g forever
 forever start server.js
 forever stop server.js
 ```
+See help for the forever command for logging and other options.
+
+### See Also
+
+[node-milight-promise](https://github.com/mwittig/node-milight-promise): The library this project uses to interface with Milight lights.
+
+[milightsdriver](https://github.com/jbchouinard/milightsdriver) A CLI interface, and a scheduler for milights-rest.
 
 ## License
 
