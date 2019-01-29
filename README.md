@@ -19,12 +19,12 @@ git clone https://github.com/jbchouinard/milights-rest.git
 cd milights-rest
 npm install
 cp config.example.js config.js
-# Edit config.js
+nano config.js
 ```
 
 ### Generate API docs
 ```bash
-# Edit "host" in swagger.json
+nano swagger.json  # Change "host" to external IP or hostname of server if you want Swagger docs examples to work
 npm install -g pretty-swag
 pretty-swag -c pretty-swag.json
 ```
