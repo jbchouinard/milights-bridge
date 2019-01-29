@@ -67,38 +67,25 @@ class RGBCCTBase {
 
         const commands = [];
         // Mode commands
-        if (mode !=="off" && this.mode === "off") {
+        if (mode !=="off") {
             commands.push(this.commands.on(this.zone));
-            console.log(this.name, "on");
         }
-        if (mode === "night" && this.mode !== "night") {
+        if (mode === "night") {
             commands.push(this.commands.nightMode(this.zone));
-            console.log(this.name, "night");
-        } else if (mode === "color" && (this.mode !== "color" || state.hue !== this.state.hue)) {
+        } else if (mode === "color") {
             commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
-            console.log(this.name, "hue", state.hue);
-        } else if (mode === "white" && this.mode !== "white") {
-            commands.push(this.commands.whiteMode(this.zone));
-            console.log(this.name, "white");
-        } else if (mode === "effect" && (this.mode !== "effect" || this.state.effectMode !== state.effectMode)) {
-            commands.push(this.commands.effectMode(this.zone, state.effectMode));
-            console.log(this.name, "effectMode", state.effectMode);
-        } else if (mode === "off" && this.mode !== "off") {
-            commands.push(this.commands.off(this.zone));
-            console.log(this.name, "off");
-        }
-        // Other commands
-        if (this.state.brightness !== state.brightness) {
             commands.push(this.commands.brightness(this.zone, state.brightness));
-            console.log(this.name, "brightness", state.brightness);
-        }
-        if (this.state.saturation !== state.saturation) {
             commands.push(this.commands.saturation(this.zone, state.saturation));
-            console.log(this.name, "saturation", state.saturation);
-        }
-        if (mode === "white" && this.state.temperature !== state.temperature) {
+        } else if (mode === "white") {
+            commands.push(this.commands.whiteMode(this.zone));
+            commands.push(this.commands.brightness(this.zone, state.brightness));
             commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
-            console.log(this.name, "temperature", state.temperature);
+        } else if (mode === "effect") {
+            commands.push(this.commands.effectMode(this.zone, state.effectMode));
+            commands.push(this.commands.brightness(this.zone, state.brightness));
+            commands.push(this.commands.saturation(this.zone, state.saturation));
+        } else if (mode === "off") {
+            commands.push(this.commands.off(this.zone));
         }
 
         if (commands.length > 0) {
