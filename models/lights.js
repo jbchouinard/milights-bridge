@@ -66,26 +66,42 @@ class RGBCCTBase {
         state = this._mergeState(mode, state);
 
         const commands = [];
-        // Mode commands
-        if (mode !=="off") {
-            commands.push(this.commands.on(this.zone));
+
+        // Change mode only if needed - unnecessarily re-setting mode causes "flicker"
+        if (this.mode !== mode) {
+            // Manage on/off
+            if (mode === "off") {
+                commands.push(this.commands.off(this.zone));
+            }
+            else if (this.mode === "off" && mode !=="off") {
+                commands.push(this.commands.on(this.zone));
+            }
+            // Manage color mode
+            if (mode === "night") {
+                commands.push(this.commands.nightMode(this.zone));
+            } else if (mode === "color") {
+                commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
+            } else if (mode === "white") {
+                commands.push(this.commands.whiteMode(this.zone));
+            } else if (mode === "effect") {
+                commands.push(this.commands.effectMode(this.zone, state.effectMode));
+            }
         }
-        if (mode === "night") {
-            commands.push(this.commands.nightMode(this.zone));
-        } else if (mode === "color") {
-            commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
-            commands.push(this.commands.brightness(this.zone, state.brightness));
+
+        // Update other settings whether they change or not, it is simpler to manage state that way
+        // since, for example, if brightness stays the same but the bulb is changed from color mode
+        // to white mode, brightness needs to be updated too - it seems the same setting is independent
+        // between modes. Unlike updating state which can cause some "flickering", updating level
+        // settings when not needed doesn't do anything
+        if (mode === "color") {
             commands.push(this.commands.saturation(this.zone, state.saturation));
+            commands.push(this.commands.brightness(this.zone, state.brightness));
         } else if (mode === "white") {
-            commands.push(this.commands.whiteMode(this.zone));
-            commands.push(this.commands.brightness(this.zone, state.brightness));
             commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
-        } else if (mode === "effect") {
-            commands.push(this.commands.effectMode(this.zone, state.effectMode));
             commands.push(this.commands.brightness(this.zone, state.brightness));
+        } else if (mode === "effect") {
             commands.push(this.commands.saturation(this.zone, state.saturation));
-        } else if (mode === "off") {
-            commands.push(this.commands.off(this.zone));
+            commands.push(this.commands.brightness(this.zone, state.brightness));
         }
 
         if (commands.length > 0) {
