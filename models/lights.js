@@ -93,14 +93,11 @@ class RGBCCTBase {
         // to white mode, brightness needs to be updated too - it seems the same setting is independent
         // between modes. Unlike updating state which can cause some "flickering", updating level
         // settings when not needed doesn't do anything
-        if (mode === "color") {
+        if (mode === "color" || mode === "effect") {
             commands.push(this.commands.saturation(this.zone, state.saturation));
             commands.push(this.commands.brightness(this.zone, state.brightness));
         } else if (mode === "white") {
             commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
-            commands.push(this.commands.brightness(this.zone, state.brightness));
-        } else if (mode === "effect") {
-            commands.push(this.commands.saturation(this.zone, state.saturation));
             commands.push(this.commands.brightness(this.zone, state.brightness));
         }
 
