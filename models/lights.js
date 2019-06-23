@@ -76,11 +76,8 @@ class RGBCCTBase {
             else if (this.mode === "off" && mode !=="off") {
                 commands.push(this.commands.on(this.zone));
             }
-            // Manage color mode
             if (mode === "night") {
                 commands.push(this.commands.nightMode(this.zone));
-            } else if (mode === "color") {
-                commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
             } else if (mode === "white") {
                 commands.push(this.commands.whiteMode(this.zone));
             } else if (mode === "effect") {
@@ -93,12 +90,16 @@ class RGBCCTBase {
         // to white mode, brightness needs to be updated too - it seems the same setting is independent
         // between modes. Unlike updating state which can cause some "flickering", updating level
         // settings when not needed doesn't do anything
-        if (mode === "color" || mode === "effect") {
+        if (mode === "color") {
+            commands.push(this.commands.hue(this.zone, this._adjustHue(state.hue)));
+            commands.push(this.commands.brightness(this.zone, state.brightness));
             commands.push(this.commands.saturation(this.zone, state.saturation));
+        } else if (mode === "effect") {
             commands.push(this.commands.brightness(this.zone, state.brightness));
+            commands.push(this.commands.saturation(this.zone, state.saturation));
         } else if (mode === "white") {
-            commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
             commands.push(this.commands.brightness(this.zone, state.brightness));
+            commands.push(this.commands.whiteTemperature(this.zone, state.temperature));
         }
 
         if (commands.length > 0) {

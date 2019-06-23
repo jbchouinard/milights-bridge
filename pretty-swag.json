@@ -1,6 +1,6 @@
 {
   "input": "swagger.json",
-  "output": "public/index.html",
+  "output": "public/api.html",
   "format": "singleFile",
   "theme": {
     "default": "black",

@@ -1,2 +1,159 @@
-<doctype html/>
-<html><body><p>milights-rest is running. See README.md to generate API docs.</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>milights</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/lights.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/lights.js"></script>
+</head>
+<body>
+<div class="title-box">
+    <div class="container container-title">
+        <h1>Milight Control</h1>
+    </div>
+</div>
+<div class="container container-body">
+    <a class="btn btn-link" href="api.html">API Documentation</a>
+    <h2>Mode</h2>
+    <div class="row">
+        <div class="col">
+            <div class="btn-group btn-block" role="group">
+                <button onclick="setAll('off', {})" type="button" class="btn btn-secondary btn-lg">Off</button>
+                <button onclick="setAll('night', {})" type="button" class="btn btn-secondary btn-lg">Night</button>
+                <button onclick="setAll('color', {})" type="button" class="btn btn-secondary btn-lg">Color</button>
+                <button onclick="setAll('white', {})" type="button" class="btn btn-secondary btn-lg">White</button>
+            </div>
+        </div>
+    </div>
+    <h2>White</h2>
+    <h3>Brightness</h3>
+    <div class="row">
+        <div class="col">
+            <div class="btn-group btn-block" role="group">
+                <button onclick="setAll('white', {brightness: 0})" type="button" class="btn btn-secondary btn-lg">0%</button>
+                <button onclick="setAll('white', {brightness: 25})" type="button" class="btn btn-secondary btn-lg">25%</button>
+                <button onclick="setAll('white', {brightness: 50})" type="button" class="btn btn-secondary btn-lg">50%</button>
+                <button onclick="setAll('white', {brightness: 75})" type="button" class="btn btn-secondary btn-lg">75%</button>
+                <button onclick="setAll('white', {brightness: 100})" type="button" class="btn btn-secondary btn-lg">100%</button>
+            </div>
+        </div>
+    </div>
+    <h3>Temperature</h3>
+    <div class="row">
+        <div class="col-4">
+            <a onclick="setAll('white', {temperature:100})">
+                <div class="lightsquare" style="background-color: #ffffff"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('white', {temperature:50})">
+                <div class="lightsquare" style="background-color: #fffafa"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('white', {temperature:0})">
+                <div class="lightsquare" style="background-color: #fff3cd"></div>
+            </a>
+        </div>
+    </div>
+    <h2>Color</h2>
+    <h3>Brightness</h3>
+    <div class="row">
+        <div class="col">
+            <div class="btn-group btn-block" role="group">
+                <button onclick="setAll('color', {brightness: 0})" type="button" class="btn btn-secondary btn-lg">0%</button>
+                <button onclick="setAll('color', {brightness: 25})" type="button" class="btn btn-secondary btn-lg">25%</button>
+                <button onclick="setAll('color', {brightness: 50})" type="button" class="btn btn-secondary btn-lg">50%</button>
+                <button onclick="setAll('color', {brightness: 75})" type="button" class="btn btn-secondary btn-lg">75%</button>
+                <button onclick="setAll('color', {brightness: 100})" type="button" class="btn btn-secondary btn-lg">100%</button>
+            </div>
+        </div>
+    </div>
+    <h3>Saturation</h3>
+    <div class="row">
+        <div class="col">
+            <div class="btn-group btn-block" role="group">
+                <button onclick="setAll('color', {saturation: 100})" type="button" class="btn btn-secondary btn-lg">0%</button>
+                <button onclick="setAll('color', {saturation: 75})" type="button" class="btn btn-secondary btn-lg">25%</button>
+                <button onclick="setAll('color', {saturation: 50})" type="button" class="btn btn-secondary btn-lg">50%</button>
+                <button onclick="setAll('color', {saturation: 25})" type="button" class="btn btn-secondary btn-lg">75%</button>
+                <button onclick="setAll('color', {saturation: 0})" type="button" class="btn btn-secondary btn-lg">100%</button>
+            </div>
+        </div>
+    </div>
+    <h3>Hue</h3>
+    <div class="row">
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 0})">
+                <div class="lightsquare" style="background-color: hsl(0, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 21})">
+                <div class="lightsquare" style="background-color: hsl(30, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 42})">
+                <div class="lightsquare" style="background-color: hsl(59, 100%, 50%)"></div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 63})">
+                <div class="lightsquare" style="background-color: hsl(89, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 84})">
+                <div class="lightsquare" style="background-color: hsl(119, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 105})">
+                <div class="lightsquare" style="background-color: hsl(148, 100%, 50%)"></div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 126})">
+                <div class="lightsquare" style="background-color: hsl(178, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 147})">
+                <div class="lightsquare" style="background-color: hsl(208, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 168})">
+                <div class="lightsquare" style="background-color: hsl(237, 100%, 50%)"></div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 189})">
+                <div class="lightsquare" style="background-color: hsl(257, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 210})">
+                <div class="lightsquare" style="background-color: hsl(281, 100%, 50%)"></div>
+            </a>
+        </div>
+        <div class="col-4">
+            <a onclick="setAll('color', {hue: 231})">
+                <div class="lightsquare" style="background-color: hsl(305, 100%, 50%)"></div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
