@@ -10,3 +10,11 @@ const setAll = async (mode, state) => {
     const parsed = await response.json();
     console.log(parsed);
 };
+
+
+const pause = async (method) => {
+    const response = await fetch("/api/sched/pause", {
+        method: method
+    });
+    console.log(response);
+};

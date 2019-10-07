@@ -16,6 +16,7 @@ config.nodejs_port = 3000;
 // or re-generate the docs so that the interactive examples in the Swagger
 // docs work from anywhere
 config.server_url = "http://127.0.0.1:3000";
+config.pause_file = "/path/to/milights-driver/pause-file";
 
 // Define zones and light types
 // Settings:
