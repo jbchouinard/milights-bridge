@@ -31,11 +31,73 @@ body {
     padding-bottom: 20px;
 }
 
-.lightsquare {
-    height: 8em;
+.slider {
+    -webkit-appearance: none;
     width: 100%;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #000;
-    margin-bottom: 15px;
+    height: 45px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    background: url('/contrast.png');
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 50px;
+    height: 50px;
+    border: 0;
+    background: url('/contrast.png');
+    cursor: pointer;
+}
+
+#hueRange {
+    background: linear-gradient(
+            to right,
+            hsl(0, 100%, 50%) 0%,
+            hsl(30, 100%, 50%) 8.3%,
+            hsl(60, 100%, 50%) 16.6%,
+            hsl(90, 100%, 50%) 25%,
+            hsl(120, 100%, 50%) 33.3%,
+            hsl(150, 100%, 50%) 41.6%,
+            hsl(180, 100%, 50%) 50%,
+            hsl(210, 100%, 50%) 58.3%,
+            hsl(240, 100%, 50%) 66.6%,
+            hsl(270, 100%, 50%) 75%,
+            hsl(300, 100%, 50%) 83.3%,
+            hsl(330, 100%, 50%) 91.6%,
+            hsl(360, 100%, 50%) 100%
+    );
+}
+
+#brightRange {
+    background: linear-gradient(
+            to right,
+            rgb(20%, 20%, 20%) 0%,
+            rgb(100%, 100%, 100%) 100%
+    );
+}
+
+#temperatureRange {
+    background: linear-gradient(
+            to right, hsl(20, 100%, 95%) 0%,
+            hsl(215, 100%, 95%) 100%
+    );
+}
+
+#saturationRange {
+    background: linear-gradient(
+            to right, hsl(20, 0%, 100%) 0%,
+            hsl(20, 100%, 50%) 100%
+    );
 }
